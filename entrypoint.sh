@@ -39,12 +39,11 @@ elif [[ ! -d $SAVE_PATH ]]; then
 fi
 
 echo " "
-echo "##[group] ⬇️Downloading WP-CLI"
+echo "##[group] ⬇️ Downloading WP-CLI"
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 echo "##[endgroup]"
-echo " "
 
 echo "##[group] 📝 Generator Arguments"
 echo "
@@ -54,12 +53,10 @@ PACKAGE_NAME : $PACKAGE_NAME
 HEADERS : $HEADERS
 SAVE_PATH : $SAVE_PATH/$DOMAIN.pot"
 echo "##[endgroup]"
-echo " "
 
 echo "##[group] 📄 Generating POT File"
 wp i18n make-pot . "$SAVE_PATH/$DOMAIN.pot" --slug="$ITEM_SLUG" --package-name="$PACKAGE_NAME" --headers="$HEADERS" --domain="$DOMAIN" --allow-root
 echo "##[endgroup]"
-echo " "
 
 if [[ "$(git status --porcelain)" != "" ]]; then
   echo "##[group] 👌 Pushing To Github"
