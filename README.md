@@ -1,5 +1,3 @@
-> **⚠️ Note:** To use this GitHub Action, you must have access to GitHub Actions. GitHub Actions are currently only available in public beta. You can [apply for Github Actions beta access here](https://github.com/features/actions).
-
 # WordPress Pot Generator - ***Github Action***
 This Action Generates POT Files for your wordpress Plugin / Theme based on the content inside Github Repo
 
@@ -13,12 +11,11 @@ This Action Generates POT Files for your wordpress Plugin / Theme based on the c
 | `HEADERS`  | NULL | Array in JSON format of custom headers which will be added to the POT file. Defaults to empty array. |
 | `GITHUB_TOKEN` | **secret** | you do not need to generate one but you do have to explicitly make it available to the Action |
 
-
-> **⚠️ Note:** You Should Provide Github Token. If Not No Updated File Will Be Committed & Pushed
+> **⚠️ Note:** You Should Provide Github Token. If Not Updated File Will Be Committed & Pushed.
 
 ## Example Workflow File
 ```yaml
-name: WordPress POT Generator
+name: On Push
 
 on:
   push:
@@ -26,12 +23,12 @@ on:
     - refs/tags/*
 
 jobs:
-  envatoftp:
+  WP_POT_Generator:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: WordPress POT Generator
-      uses: varunsridharan/action-wp-pot-generator@master
+      uses: varunsridharan/action-wp-pot-generator@1.1
       with:
         save_path: './i8n'
         item_slug: 'wponion'
