@@ -39,15 +39,16 @@ elif [[ ! -d $SAVE_PATH ]]; then
 fi
 
 echo " "
-echo "##[group] ⬇ Downloading WP-CLI"
+echo "##[group] ⬇️Downloading WP-CLI"
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 echo "##[endgroup]"
 echo " "
 
-echo "##[group] ⬇ Generator Arguments"
-echo "DOMAIN : $DOMAIN
+echo "##[group] 📝 Generator Arguments"
+echo "
+DOMAIN : $DOMAIN
 SLUG : $ITEM_SLUG
 PACKAGE_NAME : $PACKAGE_NAME
 HEADERS : $HEADERS
