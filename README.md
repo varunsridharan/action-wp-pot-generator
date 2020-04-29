@@ -20,7 +20,7 @@ name: On Push
 on:
   push:
     branches:
-    - refs/tags/*
+      - master
 
 jobs:
   WP_POT_Generator:
