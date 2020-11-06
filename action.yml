@@ -1,9 +1,9 @@
-name: 'WP Pot Generator'
+name: 'WordPress Pot Generator'
 description: 'This Action Generates POT Files for your wordpress Plugin / Theme based on the content inside Github Repo'
 author: 'varunsridharan'
 branding:
   icon: 'edit'
-  color: 'blue'
+  color: 'gray-dark'
 
 inputs:
   save_path:
