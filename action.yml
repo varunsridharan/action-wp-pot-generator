@@ -4,19 +4,25 @@ author: 'varunsridharan'
 branding:
   icon: 'edit'
   color: 'blue'
+
 inputs:
   save_path:
     description: 'Location / Path to save POT File Required'
     default: './'
+    required: false
   item_slug:
     description: 'Slug of your WordPress Theme / Plugin Slug Required'
     default: ''
+    required: false
   domain:
     description: 'WordPress Theme / Plugin TextDomain'
+    required: false
   package_name:
     description: 'WordPress Theme / Plugin Name'
+    required: false
   headers:
     description: 'Array in JSON format of custom headers which will be added to the POT file. Defaults to empty array.'
+    required: false
 
 runs:
   using: 'docker'

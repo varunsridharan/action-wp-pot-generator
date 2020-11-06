@@ -1,70 +1,52 @@
 #!/bin/sh
+set -e
 
-set -eu
+source /gh-toolkit/shell.sh
 
-BRANCH=${GITHUB_REF#refs/heads/}
-ITEM_SLUG="$INPUT_ITEM_SLUG"
-SAVE_PATH="$INPUT_SAVE_PATH"
-PACKAGE_NAME="$INPUT_PACKAGE_NAME"
-HEADERS="$INPUT_HEADERS"
-DOMAIN="$INPUT_DOMAIN"
+gh_validate_env "GITHUB_TOKEN" "SET GITHUB_TOKEN ENV Variable"
+gh_validate_input "SAVE_PATH" "SET SAVE_PATH Variable"
 
-if [[ -z "$ITEM_SLUG" ]]; then
-  ITEM_SLUG=${GITHUB_REPOSITORY#*/}
+gitconfig "WordPress BOT" "githubactionbot+wp@gmail.com"
+
+ITEM_SLUG="$(gh_input "ITEM_SLUG" "${GITHUB_REPOSITORY#*/}")"
+SAVE_PATH="$(gh_input "SAVE_PATH")"
+PACKAGE_NAME="$(gh_input "PACKAGE_NAME")"
+HEADERS="$(gh_input "HEADERS" "{}")"
+DOMAIN="$(gh_input "DOMAIN" "${ITEM_SLUG}")"
+SAVE_FULL_PATH="$SAVE_PATH/$DOMAIN.pot"
+
+if [ ! -d "$DEST_FOLDER_PATH" ]; then
+  mkdir -p $SAVE_PATH
 fi
 
-if [[ -z "$SAVE_PATH" ]]; then
-  echo "Set Pot File Save destination"
-  exit 1
-fi
-
-if [[ -z "$GITHUB_TOKEN" ]]; then
-  echo "Set the GITHUB_TOKEN env variable"
-  exit 1
-fi
-
-if [[ -z "$HEADERS" ]]; then
-  HEADERS='{}'
-fi
-
-if [[ -z "$DOMAIN" ]]; then
-  DOMAIN=${ITEM_SLUG}
-fi
-
-if [[ ! -e $SAVE_PATH ]]; then
-  mkdir $SAVE_PATH
-elif [[ ! -d $SAVE_PATH ]]; then
-  rm -r $SAVE_PATH
-  mkdir $SAVE_PATH
-fi
-
-echo " "
-echo "##[group] ⬇️ Downloading WP-CLI"
+gh_log
+gh_log_group_start "🔽 Downloading WP-CLI"
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
-echo "##[endgroup]"
+gh_log_group_end
 
-echo "##[group] 📝 Generator Arguments"
-echo "
-DOMAIN : $DOMAIN
-SLUG : $ITEM_SLUG
-PACKAGE_NAME : $PACKAGE_NAME
-HEADERS : $HEADERS
-SAVE_PATH : $SAVE_PATH/$DOMAIN.pot"
-echo "##[endgroup]"
+gh_log
+gh_log_group_start "📝 Parsed Arguments"
+gh_log "DOMAIN        : $DOMAIN"
+gh_log "SLUG          : $SLUG"
+gh_log "PACKAGE_NAME  : $PACKAGE_NAME"
+gh_log "HEADERS       : $HEADERS"
+gh_log "SAVE_PATH     : $SAVE_PATH/$DOMAIN.pot"
+gh_log_group_end
 
-echo "##[group] 📄 Generating POT File"
-wp i18n make-pot . "$SAVE_PATH/$DOMAIN.pot" --slug="$ITEM_SLUG" --package-name="$PACKAGE_NAME" --headers="$HEADERS" --domain="$DOMAIN" --allow-root
-echo "##[endgroup]"
+gh_log
+gh_log_group_start "📝 Generating POT File"
+wp i18n make-pot . "$SAVE_FULL_PATH" --slug="$ITEM_SLUG" --package-name="$PACKAGE_NAME" --headers="$HEADERS" --domain="$DOMAIN" --allow-root
+gh_log_group_end
 
-if [[ "$(git status --porcelain)" != "" ]]; then
-  echo "##[group] 👌 Pushing To Github"
-  git config --global user.email "githubactionbot+wp@gmail.com" && git config --global user.name "WP Pot Generator"
-  git add -A
-  git commit -m "💬 #$GITHUB_RUN_NUMBER - WP POT File Updated / ⚡ Triggered By $GITHUB_SHA"
-  git push "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" HEAD:$BRANCH
-  echo "##[endgroup]"
+gh_log
+if [ "$(git status --porcelain)" != "" ]; then
+  gh_log_group_start "👌 Pushing To Github"
+  git add "$SAVE_FULL_PATH"
+  git commit -m "💬 POT File Regenerated"
+  git push "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
+  gh_log_group_end
 else
-  echo "✅ Nothing To Push"
+  gh_log "✅ Nothing To Push"
 fi

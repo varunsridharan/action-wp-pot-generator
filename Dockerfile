@@ -1,6 +1,4 @@
-FROM php:zts-alpine3.11
-
-RUN apk add git
+FROM varunsridharan/actions-alpine-php:latest
 
 COPY entrypoint.sh /entrypoint.sh
 
