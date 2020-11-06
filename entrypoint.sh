@@ -63,7 +63,7 @@ if [[ "$(git status --porcelain)" != "" ]]; then
   git config --global user.email "githubactionbot+wp@gmail.com" && git config --global user.name "WP Pot Generator"
   git add -A
   git commit -m "💬 #$GITHUB_RUN_NUMBER - WP POT File Updated / ⚡ Triggered By $GITHUB_SHA"
-  git push "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY" HEAD:$BRANCH
+  git push "https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY"
   echo "##[endgroup]"
 else
   echo "✅ Nothing To Push"
