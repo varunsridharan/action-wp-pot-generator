@@ -1,4 +1,4 @@
-name: 'WordPress Pot Generator'
+name: 'Pot File Generator For WordPress'
 description: 'This Action Generates POT Files for your wordpress Plugin / Theme based on the content inside Github Repo'
 author: 'varunsridharan'
 branding:
