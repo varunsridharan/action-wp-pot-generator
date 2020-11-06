@@ -6,7 +6,7 @@ source /gh-toolkit/shell.sh
 gh_validate_env "GITHUB_TOKEN" "SET GITHUB_TOKEN ENV Variable"
 gh_validate_input "SAVE_PATH" "SET SAVE_PATH Variable"
 
-gitconfig "WordPress BOT" "githubactionbot+wp@gmail.com"
+gitconfig "WordPress Bot" "githubactionbot+wp@gmail.com"
 
 ITEM_SLUG="$(gh_input "ITEM_SLUG" "${GITHUB_REPOSITORY#*/}")"
 SAVE_PATH="$(gh_input "SAVE_PATH")"
